@@ -1,0 +1,79 @@
+# Prerequisites & Build Directories
+build/
+build*/
+bin/
+out/
+[Dd]ebug/
+[Rr]elease/
+
+# CMake Generated Files
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Testing/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+
+# Compiled Object Files & Libraries
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.so.*
+*.dylib
+*.dll
+*.mod
+*.lai
+*.la
+
+# Compiled Executables & Binaries
+*.exe
+*.out
+*.app
+*.elf
+
+# IDE & Editor Specific Files
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Visual Studio
+.vs/
+*.user
+*.userosv
+*.sln.docstates
+
+# CLion / JetBrains
+.idea/
+cmake-build-*/
+
+# Language Server / Tooling Caches
+.cache/
+.clangd/
+.ccls-cache/
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Logs & Temporary Files
+*.log
+*.tmp
+*.bak
+*.swp
+*~

@@ -2,6 +2,7 @@
 
 #include "cell.h"
 #include <stdexcept>
+#include <utility>
 #include <vector>
 
 class Grid {

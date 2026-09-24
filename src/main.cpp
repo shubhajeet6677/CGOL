@@ -6,7 +6,6 @@
 #include <cassert>
 #include <cstdio>
 
-
 static void runGridTests() {
   Grid grid(10, 5);
   assert(grid.isAlive(0, 0) == false);
@@ -113,25 +112,61 @@ int main() {
   const int cellSize = 20;
 
   SimulationState sim(gridWidth, gridHeight);
-
-  // Seed a glider near the top-left corner.
   sim.setAlive(1, 0, true);
   sim.setAlive(2, 1, true);
   sim.setAlive(0, 2, true);
   sim.setAlive(1, 2, true);
   sim.setAlive(2, 2, true);
+  sim.setAsInitial();
 
   InitWindow(gridWidth * cellSize, gridHeight * cellSize,
              "Conway's Game of Life");
   SetTargetFPS(60);
-
+  bool running = false;
+  double targetGenerationsPerSecond = 5.0;
+  double timeAccumulator = 0.0;
   while (!WindowShouldClose()) {
+    float dt = GetFrameTime();
+    if (IsKeyPressed(KEY_SPACE)) {
+      running = !running;
+    }
+    if (IsKeyPressed(KEY_RIGHT) && !running) {
+      sim.advanceOneGeneration();
+    }
+    if (IsKeyPressed(KEY_UP)) {
+      targetGenerationsPerSecond += 1.0;
+    }
+    if (IsKeyPressed(KEY_DOWN)) {
+      targetGenerationsPerSecond = (targetGenerationsPerSecond > 1.0)
+                                       ? targetGenerationsPerSecond - 1.0
+                                       : 1.0;
+    }
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) ||
+        IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
+      int gx = GetMousePosition().x / cellSize;
+      int gy = GetMousePosition().y / cellSize;
+      if (gx >= 0 && gx < sim.width() && gy >= 0 && gy < sim.height()) {
+        sim.setAlive(gx, gy, IsMouseButtonDown(MOUSE_BUTTON_LEFT));
+      }
+    }
+    if (running) {
+      timeAccumulator += dt;
+      double secondsPerGeneration = 1.0 / targetGenerationsPerSecond;
+      while (timeAccumulator >= secondsPerGeneration) {
+        sim.advanceOneGeneration();
+        timeAccumulator -= secondsPerGeneration;
+      }
+    }
     BeginDrawing();
     ClearBackground(RAYWHITE);
     drawSimulationGrid(sim, cellSize);
+    DrawText(TextFormat("Gen: %lld Pop: %d Speed: %.0f/s [%s]",
+                        sim.generation(), sim.getPopulation(),
+                        targetGenerationsPerSecond,
+                        running ? "RUNNING" : "PAUSED"),
+             10, gridHeight * cellSize - 25, 18, DARKGRAY);
     EndDrawing();
   }
-
   CloseWindow();
   return 0;
 }
